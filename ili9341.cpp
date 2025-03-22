@@ -22,13 +22,14 @@ void InitILI9341()
 #endif
 
   // Do the initialization with a very low SPI bus speed, so that it will succeed even if the bus speed chosen by the user is too high.
-  spi->clk = 34;
+ spi->clk = 34;
   __sync_synchronize();
- bool SPI_CS_BIT = 0;
+  
+  bool SPI_CS_BIT = 0;
   for (uint8_t DISPLAY_LOOP = 0; DISPLAY_LOOP < NUM_DISPLAY_LOOPS; DISPLAY_LOOP++, SPI_CS_BIT = !SPI_CS_BIT)
   {
       BEGIN_SPI_COMMUNICATION(SPI_CS_BIT);
-  {
+
       //0xE0 - PGAMCTRL Positive Gamma Control
       SPI_TRANSFER(SPI_CS_BIT, 0xE0, 0x00, 0x03, 0x09, 0x08, 0x16, 0x0A, 0x3F, 0x78, 0x4C, 0x09, 0x0A, 0x08, 0x16, 0x1A, 0x0F);
       //0xE1 - NGAMCTRL Negative Gamma Control
@@ -135,7 +136,7 @@ void InitILI9341()
         END_SPI_COMMUNICATION(SPI_CS_BIT);
       }
 #endif
-          }
+          
     }
   // And speed up to the desired operation speed finally after init is done.
   usleep(10 * 1000); // Delay a bit before restoring CLK, or otherwise this has been observed to cause the display not init if done back to back after the clear operation above.
