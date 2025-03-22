@@ -24,11 +24,7 @@ void InitILI9341()
   // Do the initialization with a very low SPI bus speed, so that it will succeed even if the bus speed chosen by the user is too high.
   spi->clk = 34;
   __sync_synchronize();
- bool SPI_CS_BIT = 0;
-  for (uint8_t DISPLAY_LOOP = 0; DISPLAY_LOOP < NUM_DISPLAY_LOOPS; DISPLAY_LOOP++, SPI_CS_BIT = !SPI_CS_BIT)
-  {
-      BEGIN_SPI_COMMUNICATION(SPI_CS_BIT);
-  {
+
       //0xE0 - PGAMCTRL Positive Gamma Control
       SPI_TRANSFER(SPI_CS_BIT, 0xE0, 0x00, 0x03, 0x09, 0x08, 0x16, 0x0A, 0x3F, 0x78, 0x4C, 0x09, 0x0A, 0x08, 0x16, 0x1A, 0x0F);
       //0xE1 - NGAMCTRL Negative Gamma Control
@@ -39,9 +35,12 @@ void InitILI9341()
       SPI_TRANSFER(SPI_CS_BIT, 0xC1, 0x41);
       // 0xC5 VCOM Control
       SPI_TRANSFER(SPI_CS_BIT, 0xC5, 0x00, 0x12, 0x80);
-
-  BEGIN_SPI_COMMUNICATION();
+ bool SPI_CS_BIT = 0;
+  for (uint8_t DISPLAY_LOOP = 0; DISPLAY_LOOP < NUM_DISPLAY_LOOPS; DISPLAY_LOOP++, SPI_CS_BIT = !SPI_CS_BIT)
   {
+      BEGIN_SPI_COMMUNICATION(SPI_CS_BIT);
+  {
+
     SPI_TRANSFER(SPI_CS_BIT, 0x01/*Software Reset*/);
     usleep(5*1000);
     SPI_TRANSFER(SPI_CS_BIT, 0x28/*Display OFF*/);
@@ -126,7 +125,7 @@ void InitILI9341()
 //    SPI_TRANSFER(SPI_CS_BIT, 0x38/*Idle Mode OFF*/);
 //    SPI_TRANSFER(SPI_CS_BIT, 0x39/*Idle Mode ON*/); // Idle mode gives a super-saturated high contrast reduced colors mode
 
-    ClearScreen();
+    ClearScreen(SPI_CS_BIT);
   }
 #ifndef USE_DMA_TRANSFERS // For DMA transfers, keep SPI CS & TA active.
       END_SPI_COMMUNICATION(SPI_CS_BIT);
