@@ -110,7 +110,7 @@ void InitILI9341()
     SPI_TRANSFER(SPI_CS_BIT, 0xE1/*Negative Gamma Correction*/, 0x00, 0x0E, 0x14, 0x03, 0x11, 0x07, 0x31, 0xC1, 0x48, 0x08, 0x0F, 0x0C, 0x31, 0x36, 0x0F);
     SPI_TRANSFER(SPI_CS_BIT, 0x11/*Sleep Out*/);
     usleep(120 * 1000);
-    SPI_TRANSFER(/*Display ON*/0x29);
+    SPI_TRANSFER(SPI_CS_BIT,/*Display ON*/0x29);
 
 #if defined(GPIO_TFT_BACKLIGHT) && defined(BACKLIGHT_CONTROL)
     printf("Setting TFT backlight on at pin %d\n", GPIO_TFT_BACKLIGHT);
