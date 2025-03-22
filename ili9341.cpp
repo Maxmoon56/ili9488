@@ -127,7 +127,7 @@ void InitILI9341()
 //    SPI_TRANSFER(SPI_CS_BIT, 0x39/*Idle Mode ON*/); // Idle mode gives a super-saturated high contrast reduced colors mode
 
     ClearScreen(SPI_CS_BIT);
-  }
+
 #ifndef USE_DMA_TRANSFERS // For DMA transfers, keep SPI CS & TA active.
       END_SPI_COMMUNICATION(SPI_CS_BIT);
 #else
@@ -136,7 +136,7 @@ void InitILI9341()
         END_SPI_COMMUNICATION(SPI_CS_BIT);
       }
 #endif
-          
+         }   
     }
   // And speed up to the desired operation speed finally after init is done.
   usleep(10 * 1000); // Delay a bit before restoring CLK, or otherwise this has been observed to cause the display not init if done back to back after the clear operation above.
